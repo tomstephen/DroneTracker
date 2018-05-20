@@ -4,7 +4,7 @@ import os
 import time
 
 pathToTemplates = "queryImages"
-threshold = 0.8
+threshold = 0.85
 
 templates = []
 
@@ -23,6 +23,8 @@ def highlightMatches(frame, templates, threshold): # find & highlight drone in g
     img_grey = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
     img_out = frame
 
+    i = 1
+
     for template in templates:
         for scale_percentage in xrange(scale_min, scale_max, scale_step):
             scale_factor = float(scale_percentage) / 100
@@ -34,12 +36,13 @@ def highlightMatches(frame, templates, threshold): # find & highlight drone in g
 
             for pt in zip(*loc[::-1]): # highlight (rectangle around) matches
                 cv2.rectangle(img_out, pt, (pt[0] + w, pt[1] + h), (0,0,255), 2)
+        i += 1
 
     return img_out
 
 def separateFrames(): # separate video into frames
     print("Separating Frames...")
-    vidcap = cv2.VideoCapture("Video1.mp4")
+    vidcap = cv2.VideoCapture("Tailchase.mp4")
     success,image = vidcap.read()
     count = 0
     success = True
